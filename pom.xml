@@ -1,0 +1,217 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>lucas8338.sst</groupId> <!-- recommended to use only lowercase. -->
+	<artifactId>sst</artifactId> <!-- this value must be completly lowercase. -->
+	<version>0.0.1.0</version>
+	<packaging>jar</packaging>
+
+	<!-- here defines the project information all them are optional -->
+	<name>sst</name>
+	<description></description> <!-- a short description of the project -->
+	<url></url>
+	<inceptionYear></inceptionYear> <!-- the year when the project was first created -->
+    <licenses></licenses>
+	<organization></organization>
+    <developers></developers>
+    <contributors></contributors>
+
+	<!-- constants for the project -->
+	<properties>
+	
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- the main class to run if you are developing a library then you can just let it blank.
+			 if the value of this field is blank then the 'Class-Name' key of the manifest file will not be
+			 included but the jar still will be generated. -->
+		<mainClass></mainClass>
+		
+		<!-- the version of java which you want to compile for. -->
+		<javaVersion>17</javaVersion>
+		
+	</properties>
+	
+	<dependencyManagement></dependencyManagement>
+	<modules></modules>
+	
+	<!-- the dependencies of the project. -->
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.9.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.12</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>2.0.12</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>21.0.2</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>21.0.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.fair-acc</groupId>
+			<artifactId>chartfx</artifactId>
+			<version>11.3.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.10.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-rng-simple -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-rng-simple</artifactId>
+			<version>1.5</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.esotericsoftware.yamlbeans/yamlbeans -->
+		<dependency>
+			<groupId>com.esotericsoftware.yamlbeans</groupId>
+			<artifactId>yamlbeans</artifactId>
+			<version>1.17</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<!-- build settings -->
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.5</version>
+				<configuration>
+					<suiteXmlFiles>
+						testngSuite.xml
+					</suiteXmlFiles>
+					<properties>
+						<property>
+							<name>surefire.testng.verbose</name>
+							<value>1</value>
+						</property>
+					</properties>
+				</configuration>
+			</plugin>
+
+			<plugin> <!-- plugin to configure the maven compilation process. -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.12.1</version>
+				<configuration>
+					<source>17</source>
+					<target>17</target>
+				</configuration>
+			</plugin>
+
+			<plugin> <!-- plugin to generate an executable jar with dependencies (fatJar).
+						  the generated jar file will not be uploaded during the 'deploy' phase. -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.5.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<finalName>${project.artifactId}-${project.version}-withDependencies</finalName>
+							<transformers>
+								<!-- the 'ServicesResourceTransformer' is required when generating a fatJar -->
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>${mainClass}</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin> <!-- plugin to generate the javadoc during the package phase. the generated javadoc will be deployed (uploaded)
+						  too to the cloud during the 'deploy' phase. -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.6.3</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<tags>
+						<tag>
+							<name>apiNote</name>
+							<placement>a</placement>
+							<head>API Note:</head>
+						</tag>
+						<tag>
+							<name>implSpec</name>
+							<placement>a</placement>
+							<head>Implementation Requirements:</head>
+						</tag>
+						<tag>
+							<name>implNote</name>
+							<placement>a</placement>
+							<head>Implementation Note:</head>
+						</tag>
+					</tags>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	<reporting></reporting>
+	
+	<!-- Environment Settings -->
+	<issueManagement></issueManagement>
+	<ciManagement></ciManagement>
+	<mailingLists></mailingLists>
+	<scm></scm>
+	<prerequisites></prerequisites>
+	<repositories></repositories>
+	<pluginRepositories></pluginRepositories>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/lucas8338/sst</url>
+		</repository>
+	</distributionManagement>
+	<profiles></profiles>
+</project>
