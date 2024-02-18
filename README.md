@@ -5,7 +5,7 @@ a java table which is simple and implements the serializable java interface.
 ## Classes
 
 * `Table`: contains the main logic of the table.
-  * `'x'Column`: where 'x' can be "String, Integer, Double, Float, Boolean etc." are specific column implementation for a type. they are used during the interation with a table.
+  * `'x'Column`: where 'x' can be "String, Integer, Long, Float, Double, Boolean etc." are specific column implementation for a type. they are used during the interation with a table.
 * `TableTools`: an abstract class that contains static methods which are utilities to work with a table, for example, "concat, subsets (row or by column), sorting etc.".
 * `Importing`: an abstastract class that contains static methods to work with importing data.
 * `Visualization`: an abstract class that contains static methods to work with visualization (printing, ploting, rendering etc.).
