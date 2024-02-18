@@ -25,12 +25,14 @@ public interface Column<T extends Serializable> extends Serializable, Iterable<T
         return (IntegerColumn) this;
     }
 
-    default DoubleColumn asDoubleColumn() {
-        return (DoubleColumn) this;
-    }
+    default LongColumn asLongColumn(){ return (LongColumn) this; }
 
     default FloatColumn asFloatColumn() {
         return (FloatColumn) this;
+    }
+
+    default DoubleColumn asDoubleColumn() {
+        return (DoubleColumn) this;
     }
 
     default BooleanColumn asBooleanColumn() {
@@ -79,14 +81,20 @@ public interface Column<T extends Serializable> extends Serializable, Iterable<T
         throw new NotImplementedException(message);
     }
 
-    default void setDouble(int index, Double value) {
-        String message = "setDouble not implemented";
+    default void setLong(int index, Long value){
+        String message = "setLong not implemented";
         logger.error(message);
         throw new NotImplementedException(message);
     }
 
     default void setFloat(int index, Float value) {
         String message = "setFloat not implemented";
+        logger.error(message);
+        throw new NotImplementedException(message);
+    }
+
+    default void setDouble(int index, Double value) {
+        String message = "setDouble not implemented";
         logger.error(message);
         throw new NotImplementedException(message);
     }
@@ -108,6 +116,7 @@ public interface Column<T extends Serializable> extends Serializable, Iterable<T
             switch (type) {
                 case String -> this.setString(index, (String) value);
                 case Integer -> this.setInteger(index, (Integer) value);
+                case Long -> this.setLong(index, (Long) value);
                 case Float -> this.setFloat(index, (Float) value);
                 case Double -> this.setDouble(index, (Double) value);
                 case Boolean -> this.setBoolean(index, (Boolean) value);
@@ -137,6 +146,7 @@ public interface Column<T extends Serializable> extends Serializable, Iterable<T
         switch (dataType) {
             case String -> this.setString(index, value);
             case Integer -> this.setInteger(index, !value.isEmpty() ? Integer.parseInt(value) : null);
+            case Long -> this.setLong(index, !value.isEmpty() ? Long.parseLong(value) : null);
             case Float -> this.setFloat(index, !value.isEmpty() ? Float.parseFloat(value) : null);
             case Double -> this.setDouble(index, !value.isEmpty() ? Double.parseDouble(value) : null);
             case Boolean -> this.setBoolean(index, !value.isEmpty() ? Boolean.parseBoolean(value) : null);

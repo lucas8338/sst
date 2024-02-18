@@ -242,6 +242,7 @@ public class TableSorting {
         return switch (dataType) {
             case String -> ((Comparator<String>) comparator).compare((String) a, (String) b);
             case Integer -> ((Comparator<Integer>) comparator).compare((Integer) a, (Integer) b);
+            case Long -> ((Comparator<Long>) comparator).compare((Long) a, (Long) b);
             case Float -> ((Comparator<Float>) comparator).compare((Float) a, (Float) b);
             case Double -> ((Comparator<Double>) comparator).compare((Double) a, (Double) b);
             case Boolean -> ((Comparator<Boolean>) comparator).compare((Boolean) a, (Boolean) b);
@@ -259,6 +260,11 @@ public class TableSorting {
             case Integer -> BasicUtil.order(
                     (List<Integer>) data,
                     (Comparator<Integer>) comparator
+            );
+
+            case Long -> BasicUtil.order(
+                    (List<Long>) data,
+                    (Comparator<Long>) comparator
             );
 
             case Float -> BasicUtil.order(

@@ -66,14 +66,7 @@ public class TableConcatenation {
                 DataType columnType = column.getType();
                 Serializable value = column.get(i);
                 Column<? extends Serializable> receiverColumn = this.receiver.getColumn(columnName);
-                switch (columnType) {
-                    case String -> receiverColumn.setString(addedRowIndex, (String) value);
-                    case Integer -> receiverColumn.setInteger(addedRowIndex, (Integer) value);
-                    case Double -> receiverColumn.setDouble(addedRowIndex, (Double) value);
-                    case Float -> receiverColumn.setFloat(addedRowIndex, (Float) value);
-                    case Boolean -> receiverColumn.setBoolean(addedRowIndex, (Boolean) value);
-                    default -> throw new RuntimeException("unhandled data type.");
-                }
+                receiverColumn.set(addedRowIndex, value, receiverColumn.getType());
             }
         }
 

@@ -48,14 +48,7 @@ public abstract class TableTools {
         Column<? extends Serializable> addedColumn = table.addColumn(columnName, dataType);
 
         for (int i = 0; i < tableNRow; i++) {
-            switch (dataType) {
-                case String -> addedColumn.setString(i, (String) data.get(i));
-                case Integer -> addedColumn.setInteger(i, (Integer) data.get(i));
-                case Double -> addedColumn.setDouble(i, (Double) data.get(i));
-                case Float -> addedColumn.setFloat(i, (Float) data.get(i));
-                case Boolean -> addedColumn.setBoolean(i, (Boolean) data.get(i));
-                default -> throw new RuntimeException("not handled dataType");
-            }
+            addedColumn.set(i, data.get(i), addedColumn.getType());
         }
     }
 
@@ -129,8 +122,9 @@ public abstract class TableTools {
             Boolean matchCondition = switch (dataType) {
                 case String -> ((Predicate<String>) filter).test((String) value);
                 case Integer -> ((Predicate<Integer>) filter).test((Integer) value);
-                case Double -> ((Predicate<Double>) filter).test((Double) value);
+                case Long -> ((Predicate<Long>) filter).test((Long) value);
                 case Float -> ((Predicate<Float>) filter).test((Float) value);
+                case Double -> ((Predicate<Double>) filter).test((Double) value);
                 case Boolean -> ((Predicate<Boolean>) filter).test((Boolean) value);
                 default -> throw new RuntimeException("unhandled datatype.");
             };
@@ -143,14 +137,7 @@ public abstract class TableTools {
                     String tableColumnName = tableColumn.getName();
                     DataType tableColumnDataType = tableColumn.getType();
                     Column<? extends Serializable> newTableColumn = newTable.getColumn(tableColumnName);
-                    switch (tableColumnDataType) {
-                        case String -> newTableColumn.setString(newRowIndex, (String) tableColumn.get(i));
-                        case Integer -> newTableColumn.setInteger(newRowIndex, (Integer) tableColumn.get(i));
-                        case Double -> newTableColumn.setDouble(newRowIndex, (Double) tableColumn.get(i));
-                        case Float -> newTableColumn.setFloat(newRowIndex, (Float) tableColumn.get(i));
-                        case Boolean -> newTableColumn.setBoolean(newRowIndex, (Boolean) tableColumn.get(i));
-                        default -> throw new RuntimeException("unhandled dataType.");
-                    }
+                    newTableColumn.set(newRowIndex, tableColumn.get(i), newTableColumn.getType());
                 }
             }
         }

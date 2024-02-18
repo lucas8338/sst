@@ -6,7 +6,8 @@ package sst.table;
 public enum DataType {
     String,
     Integer,
-    Double,
+    Long,
     Float,
+    Double,
     Boolean
 }

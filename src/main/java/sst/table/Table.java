@@ -79,16 +79,15 @@ public class Table implements Serializable, Cloneable, Iterable<Column<? extends
      * add a column with nulls to the table.
      */
     public Column<? extends Serializable> addColumn(String columnName, DataType dataType) {
-        AbstractColumn<? extends Serializable> proposedNewColumn;
-
-        switch (dataType) {
-            case String -> proposedNewColumn = new StringColumn();
-            case Integer -> proposedNewColumn = new IntegerColumn();
-            case Double -> proposedNewColumn = new DoubleColumn();
-            case Float -> proposedNewColumn = new FloatColumn();
-            case Boolean -> proposedNewColumn = new BooleanColumn();
+        AbstractColumn<? extends Serializable> proposedNewColumn = switch (dataType) {
+            case String -> new StringColumn();
+            case Integer -> new IntegerColumn();
+            case Long -> new LongColumn();
+            case Float -> new FloatColumn();
+            case Double -> new DoubleColumn();
+            case Boolean -> new BooleanColumn();
             default -> throw new RuntimeException("not handled dataType");
-        }
+        };
 
         proposedNewColumn.setName(columnName);
 
