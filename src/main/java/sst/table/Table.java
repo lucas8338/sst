@@ -155,6 +155,34 @@ public class Table implements Serializable, Cloneable, Iterable<Column<? extends
     }
 
     /**
+     * rename a column of the table.
+     * @implNote because you cant change the key value of a linkedHashMap and keep their
+     * order, here i'm practically recreating the 'column' instance variable putting each
+     * column in the new created temporary linked hash map. and when i hit the column that i want
+     * i just put it with a new key name. as i'm practically copying the whole original map
+     * this can consume a lot of memory. so i expect that the garbage collector can handle
+     * it.
+     * */
+    public void renameColumn(String columnName, String newColumnName){
+        Map<String, AbstractColumn<? extends Serializable>> newColumns = new LinkedHashMap<>();
+        for ( String key: this.columns.keySet() ){
+            AbstractColumn<? extends Serializable> column = this.columns.get( key );
+            if ( key.equals( columnName ) ){
+                logger.debug( "putting the pair key/value with the new name." );
+                newColumns.put( newColumnName, column );
+                logger.debug( "renaming column name in the column class." );
+                newColumns.get( newColumnName ).name = newColumnName;
+            }else{
+                newColumns.put( key, column );
+            }
+        }
+        logger.debug( "erasing the current 'columns' instance variable." );
+        this.columns.clear();
+        logger.debug( "putting the new columns in the original hash map." );
+        this.columns.putAll( newColumns );
+    }
+
+    /**
      * @param nRows              the maximum number of rows allowed.
      * @param nRowsEstimateWidth the maximum number of rows to estimate the columns width.
      * @param columnWidthType    the column width type estimation.
