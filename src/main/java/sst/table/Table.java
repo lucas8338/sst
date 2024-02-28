@@ -21,7 +21,7 @@ import java.util.*;
  * storage of data. so i need to make sure all rows contains the same columns vise-versa.
  */
 public class Table implements Serializable, Cloneable, Iterable<Column<? extends Serializable>> {
-    private static final Logger logger = LoggerFactory.getLogger(Table.class);
+    private static final Logger logger = LoggerFactory.getLogger( Table.class );
 
     private final Map<String, AbstractColumn<? extends Serializable>> columns = new LinkedHashMap<>();
 
@@ -53,8 +53,8 @@ public class Table implements Serializable, Cloneable, Iterable<Column<? extends
         );
     }
 
-    public Column<? extends Serializable> getColumn(String columnName) {
-        return this.columns.get(columnName);
+    public Column<? extends Serializable> getColumn( String columnName ) {
+        return this.columns.get( columnName );
     }
 
     /**
@@ -68,41 +68,41 @@ public class Table implements Serializable, Cloneable, Iterable<Column<? extends
 
     public Map<String, DataType> getColumnTypes() {
         Map<String, DataType> dataTypes = new LinkedHashMap<>();
-        for (String columnName : this.getColumnNames()) {
-            Column<? extends Serializable> column = this.getColumn(columnName);
-            dataTypes.put(columnName, column.getType());
+        for ( String columnName : this.getColumnNames() ) {
+            Column<? extends Serializable> column = this.getColumn( columnName );
+            dataTypes.put( columnName, column.getType() );
         }
-        return Collections.unmodifiableMap(dataTypes);
+        return Collections.unmodifiableMap( dataTypes );
     }
 
     /**
      * add a column with nulls to the table.
      */
-    public Column<? extends Serializable> addColumn(String columnName, DataType dataType) {
-        AbstractColumn<? extends Serializable> proposedNewColumn = switch (dataType) {
+    public Column<? extends Serializable> addColumn( String columnName, DataType dataType ) {
+        AbstractColumn<? extends Serializable> proposedNewColumn = switch ( dataType ) {
             case String -> new StringColumn();
             case Integer -> new IntegerColumn();
             case Long -> new LongColumn();
             case Float -> new FloatColumn();
             case Double -> new DoubleColumn();
             case Boolean -> new BooleanColumn();
-            default -> throw new RuntimeException("not handled dataType");
+            default -> throw new RuntimeException( "not handled dataType" );
         };
 
-        proposedNewColumn.setName(columnName);
+        proposedNewColumn.setName( columnName );
 
         proposedNewColumn.dataType = dataType;
 
-        for (int i = 0; i < nRow; i++) {
-            proposedNewColumn.add(null);
+        for ( int i = 0; i < nRow; i++ ) {
+            proposedNewColumn.add( null );
         }
 
         assert proposedNewColumn.size() == this.nRow : "the number of elements in the generated colum needs to be " +
                 "equal to the number of elements in the 'nRow' instance variable.";
 
-        this.columns.put(columnName, proposedNewColumn);
+        this.columns.put( columnName, proposedNewColumn );
 
-        return this.columns.get(columnName);
+        return this.columns.get( columnName );
     }
 
     /**
@@ -117,8 +117,8 @@ public class Table implements Serializable, Cloneable, Iterable<Column<? extends
                 nCol > 0,
                 "cant add a row for a table with '0' columns."
         );
-        for (String columnName : columnNames) {
-            this.columns.get(columnName).add(null);
+        for ( String columnName : columnNames ) {
+            this.columns.get( columnName ).add( null );
         }
         this.nRow++;
 
@@ -128,15 +128,15 @@ public class Table implements Serializable, Cloneable, Iterable<Column<? extends
     /**
      * remove the specified rowIndex from the table.
      */
-    public void removeRow(int index) throws Exception {
-        for (String columnName : this.getColumnNames()) {
-            AbstractColumn<? extends Serializable> column = this.columns.get(columnName);
+    public void removeRow( int index ) throws Exception {
+        for ( String columnName : this.getColumnNames() ) {
+            AbstractColumn<? extends Serializable> column = this.columns.get( columnName );
             try {
-                column.remove(index);
-            } catch (Exception e) {
+                column.remove( index );
+            } catch ( Exception e ) {
                 String message = "was not possible to delete the row index '" + index + "'.";
-                logger.error(message);
-                throw new Exception(message);
+                logger.error( message );
+                throw new Exception( message );
             }
         }
         this.nRow--;
@@ -145,34 +145,39 @@ public class Table implements Serializable, Cloneable, Iterable<Column<? extends
     /**
      * remove the specified column from the table.
      */
-    public void removeColumn(String columnName) throws Exception {
-        Serializable deletionResult = this.columns.remove(columnName);
-        if (deletionResult == null) {
+    public void removeColumn( String columnName ) throws Exception {
+        Serializable deletionResult = this.columns.remove( columnName );
+        if ( deletionResult == null ) {
             String message = "was not possible to delete the column '" + columnName + "'.";
-            logger.error(message);
-            throw new Exception(message);
+            logger.error( message );
+            throw new Exception( message );
         }
     }
 
     /**
      * rename a column of the table.
+     *
      * @implNote because you cant change the key value of a linkedHashMap and keep their
      * order, here i'm practically recreating the 'column' instance variable putting each
      * column in the new created temporary linked hash map. and when i hit the column that i want
      * i just put it with a new key name. as i'm practically copying the whole original map
      * this can consume a lot of memory. so i expect that the garbage collector can handle
      * it.
-     * */
-    public void renameColumn(String columnName, String newColumnName){
+     * todo: this functionality was put in the 'table' class. but looking more clearly
+     *  i found that this should to be placed in the 'TableTools' class. because
+     *  this is not a 'core' for a table. is just a thing which happens to work with it.
+     *  'like a tool'.
+     */
+    public void renameColumn( String columnName, String newColumnName ) {
         Map<String, AbstractColumn<? extends Serializable>> newColumns = new LinkedHashMap<>();
-        for ( String key: this.columns.keySet() ){
+        for ( String key : this.columns.keySet() ) {
             AbstractColumn<? extends Serializable> column = this.columns.get( key );
-            if ( key.equals( columnName ) ){
+            if ( key.equals( columnName ) ) {
                 logger.debug( "putting the pair key/value with the new name." );
                 newColumns.put( newColumnName, column );
                 logger.debug( "renaming column name in the column class." );
                 newColumns.get( newColumnName ).name = newColumnName;
-            }else{
+            } else {
                 newColumns.put( key, column );
             }
         }
@@ -183,54 +188,57 @@ public class Table implements Serializable, Cloneable, Iterable<Column<? extends
     }
 
     /**
-     * @param nRows              the maximum number of rows allowed.
-     * @param nRowsEstimateWidth the maximum number of rows to estimate the columns width.
-     * @param columnWidthType    the column width type estimation.
+     * @param nRows
+     *         the maximum number of rows allowed.
+     * @param nRowsEstimateWidth
+     *         the maximum number of rows to estimate the columns width.
+     * @param columnWidthType
+     *         the column width type estimation.
      */
-    public String print(int nRows, int nRowsEstimateWidth, AutoColumnWidthType columnWidthType) {
+    public String print( int nRows, int nRowsEstimateWidth, AutoColumnWidthType columnWidthType ) {
         int limit = nRows;
         int trueLimit;
         int tableNRow = this.nRow();
-        if (tableNRow > limit) {
+        if ( tableNRow > limit ) {
             trueLimit = limit;
         } else {
             trueLimit = tableNRow;
         }
 
-        TablePrinter tablePrinterClass = new TablePrinter(this);
-        tablePrinterClass.estimateColumnsWidth(columnWidthType, nRowsEstimateWidth);
+        TablePrinter tablePrinterClass = new TablePrinter( this );
+        tablePrinterClass.estimateColumnsWidth( columnWidthType, nRowsEstimateWidth );
         StringBuilder sb = new StringBuilder();
         tablePrinterClass.printDecorator();
         tablePrinterClass.printColumnNames();
         tablePrinterClass.printDecorator();
-        for (int i = 0; i < trueLimit; i++) {
-            tablePrinterClass.printRow(i);
+        for ( int i = 0; i < trueLimit; i++ ) {
+            tablePrinterClass.printRow( i );
         }
         tablePrinterClass.printDecorator();
-        sb.append(tablePrinterClass.getText());
-        sb.append("showing '" + trueLimit + "' rows of '" + tableNRow + "' x '" + this.getColumns().size() + "' columns.\n");
+        sb.append( tablePrinterClass.getText() );
+        sb.append( "showing '" + trueLimit + "' rows of '" + tableNRow + "' x '" + this.getColumns().size() + "' columns.\n" );
         return sb.toString();
     }
 
     public String printAll() {
         int limit = this.nRow();
-        return this.print(limit, 300, AutoColumnWidthType.percentile80);
+        return this.print( limit, 300, AutoColumnWidthType.percentile80 );
     }
 
     public String toString() {
         int limit = 100;
-        return this.print(limit, 100, AutoColumnWidthType.average);
+        return this.print( limit, 100, AutoColumnWidthType.average );
     }
 
     public Table clone() {
         try {
             Table clone = (Table) super.clone();
-            clone.columns.putAll(this.columns);
+            clone.columns.putAll( this.columns );
             clone.nRow = this.nRow;
 
             return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException("error while creating a clone of a table.");
+        } catch ( CloneNotSupportedException e ) {
+            throw new RuntimeException( "error while creating a clone of a table." );
         }
     }
 
@@ -240,7 +248,7 @@ public class Table implements Serializable, Cloneable, Iterable<Column<? extends
      * @return an Iterator.
      */
     public Iterator<Column<? extends Serializable>> iterator() {
-        TableIterator iterator = new TableIterator(this);
+        TableIterator iterator = new TableIterator( this );
         return iterator;
     }
 }

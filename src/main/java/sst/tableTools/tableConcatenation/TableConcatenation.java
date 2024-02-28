@@ -13,7 +13,7 @@ public class TableConcatenation {
     protected final Table receiver;
     protected final Table giver;
 
-    public TableConcatenation(Table receiver, Table giver) {
+    public TableConcatenation( Table receiver, Table giver ) {
         this.receiver = receiver;
         this.giver = giver;
     }
@@ -21,7 +21,7 @@ public class TableConcatenation {
     /**
      * append all columns in the 'giver' table to the 'receiver' table.
      */
-    public void appendColumns() {
+    public void appendColumns() throws Exception {
         int receiverNRows = this.receiver.nRow();
         int giverNRows = this.giver.nRow();
 
@@ -31,10 +31,10 @@ public class TableConcatenation {
                 "to append columns the number of rows of both tables needs to be equal."
         );
 
-        for (Column<? extends Serializable> column : this.giver) {
+        for ( Column<? extends Serializable> column : this.giver ) {
             String columnName = column.getName();
-            if (!this.receiver.getColumnNames().contains(columnName)) {
-                TableTools.addColumnWithData(this.receiver, columnName, column.getType(), column.asList());
+            if ( ! this.receiver.getColumnNames().contains( columnName ) ) {
+                TableTools.addColumnWithData( this.receiver, columnName, column.getType(), column.asList() );
             }
         }
     }
@@ -44,29 +44,29 @@ public class TableConcatenation {
         List<String> giverColumnNames = this.giver.getColumnNames();
 
         Assert.assertTrue(
-                giverColumnNames.containsAll(receiverColumnNames),
+                giverColumnNames.containsAll( receiverColumnNames ),
                 "the giver table needs to contains all columns existing in the receiver table."
         );
 
-        for (Column<? extends Serializable> column : this.giver) {
+        for ( Column<? extends Serializable> column : this.giver ) {
             String giverColumnName = column.getName();
             Assert.assertEquals(
                     column.getType(),
-                    this.receiver.getColumn(giverColumnName).getType(),
+                    this.receiver.getColumn( giverColumnName ).getType(),
                     "the type of both columns in the giver and the receiver needs to be the same."
             );
         }
 
         int giverNRows = this.giver.nRow();
 
-        for (int i = 0; i < giverNRows; i++) {
+        for ( int i = 0; i < giverNRows; i++ ) {
             int addedRowIndex = this.receiver.addRow();
-            for (Column<? extends Serializable> column : this.giver) {
+            for ( Column<? extends Serializable> column : this.giver ) {
                 String columnName = column.getName();
                 DataType columnType = column.getType();
-                Serializable value = column.get(i);
-                Column<? extends Serializable> receiverColumn = this.receiver.getColumn(columnName);
-                receiverColumn.set(addedRowIndex, value, receiverColumn.getType());
+                Serializable value = column.get( i );
+                Column<? extends Serializable> receiverColumn = this.receiver.getColumn( columnName );
+                receiverColumn.set( addedRowIndex, value, receiverColumn.getType() );
             }
         }
 

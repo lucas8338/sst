@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * implements a column which stores string.
- * */
+ */
 public class StringColumn extends AbstractColumn<String> {
 
     private final List<String> storage = new ArrayList<>();
@@ -20,8 +20,8 @@ public class StringColumn extends AbstractColumn<String> {
      *
      * @param index
      */
-    public String get(int index) {
-        return this.storage.get(index);
+    public String get( int index ) {
+        return this.storage.get( index );
     }
 
     /**
@@ -47,19 +47,19 @@ public class StringColumn extends AbstractColumn<String> {
         );
     }
 
-    protected void add(String data) {
-        this.storage.add(data);
+    protected void add( String data ) {
+        this.storage.add( data );
     }
 
-    protected void remove(int index) {
-        this.storage.remove(index);
+    protected void remove( int index ) {
+        this.storage.remove( index );
     }
 
-    protected void set(int index, String data) {
-        this.storage.set(index, data);
+    protected void set( int index, String data ) {
+        this.storage.set( index, data );
     }
 
-    public void setString(int index, String data) {
-        this.set(index, data);
+    public void setString( int index, String data ) {
+        this.set( index, data );
     }
 }

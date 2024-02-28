@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * implements a column which store boolean column.
- * */
+ */
 public class BooleanColumn extends AbstractColumn<Boolean> {
 
     /**
@@ -32,10 +32,10 @@ public class BooleanColumn extends AbstractColumn<Boolean> {
      *
      * @param index
      */
-    public Boolean get(int index) {
-        if (this.trueStorage.get(index) && !this.falseStorage.get(index)) {
+    public Boolean get( int index ) {
+        if ( this.trueStorage.get( index ) && ! this.falseStorage.get( index ) ) {
             return true;
-        } else if (!this.trueStorage.get(index) && this.falseStorage.get(index)) {
+        } else if ( ! this.trueStorage.get( index ) && this.falseStorage.get( index ) ) {
             return false;
         } else {
             return null;
@@ -58,14 +58,14 @@ public class BooleanColumn extends AbstractColumn<Boolean> {
      */
     public List<Boolean> asList() {
         int size = this.size();
-        List<Boolean> booleanList = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            if (this.get(i) == null) {
-                booleanList.add(null);
-            } else if (this.get(i)) {
-                booleanList.add(true);
-            } else if (!this.get(i)) {
-                booleanList.add(false);
+        List<Boolean> booleanList = new ArrayList<>( size );
+        for ( int i = 0; i < size; i++ ) {
+            if ( this.get( i ) == null ) {
+                booleanList.add( null );
+            } else if ( this.get( i ) ) {
+                booleanList.add( true );
+            } else if ( ! this.get( i ) ) {
+                booleanList.add( false );
             }
         }
         return Collections.unmodifiableList(
@@ -73,51 +73,51 @@ public class BooleanColumn extends AbstractColumn<Boolean> {
         );
     }
 
-    protected void add(Boolean data) {
+    protected void add( Boolean data ) {
         int size = this.size();
-        if (data == null) {
+        if ( data == null ) {
             // empty here
-        } else if (data) {
-            this.trueStorage.set(size, true);
+        } else if ( data ) {
+            this.trueStorage.set( size, true );
         } else {
-            this.falseStorage.set(size, false);
+            this.falseStorage.set( size, false );
         }
         this.size++;
     }
 
-    protected void remove(int index) {
+    protected void remove( int index ) {
         int size = this.size;
         Assert.assertTrue(
                 index <= size
         );
-        this.trueStorage.set(index, false);
-        this.falseStorage.set(index, false);
+        this.trueStorage.set( index, false );
+        this.falseStorage.set( index, false );
         this.size--;
     }
 
     /**
      * set a value to the storage.
      */
-    protected void set(int index, Boolean value) {
+    protected void set( int index, Boolean value ) {
         Assert.assertTrue(
                 index <= this.size(),
                 "you can only set value for va"
         );
 
-        if (value == null) {
-            this.trueStorage.set(index, false);
-            this.falseStorage.set(index, false);
-        } else if (value) {
-            this.trueStorage.set(index, true);
-            this.falseStorage.set(index, false);
-        } else if (!value) {
-            this.trueStorage.set(index, false);
-            this.falseStorage.set(index, true);
+        if ( value == null ) {
+            this.trueStorage.set( index, false );
+            this.falseStorage.set( index, false );
+        } else if ( value ) {
+            this.trueStorage.set( index, true );
+            this.falseStorage.set( index, false );
+        } else if ( ! value ) {
+            this.trueStorage.set( index, false );
+            this.falseStorage.set( index, true );
         }
     }
 
-    public void setBoolean(int index, Boolean data) {
-        this.set(index, data);
+    public void setBoolean( int index, Boolean data ) {
+        this.set( index, data );
     }
 
 }

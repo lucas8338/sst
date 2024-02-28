@@ -6,9 +6,9 @@ import java.util.Iterator;
 public class TableIterator implements Iterator<Column<? extends Serializable>> {
     protected final Table table;
 
-    protected int showedColumnIndex = -1;
+    protected int showedColumnIndex = - 1;
 
-    public TableIterator(Table table) {
+    public TableIterator( Table table ) {
         this.table = table;
     }
 
@@ -29,7 +29,7 @@ public class TableIterator implements Iterator<Column<? extends Serializable>> {
      * @return the next element in the iteration
      */
     public Column<? extends Serializable> next() {
-        Column<? extends Serializable> column = this.table.getColumn(this.table.getColumnNames().get(this.showedColumnIndex + 1));
+        Column<? extends Serializable> column = this.table.getColumn( this.table.getColumnNames().get( this.showedColumnIndex + 1 ) );
         this.showedColumnIndex++;
         return column;
     }

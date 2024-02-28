@@ -9,13 +9,13 @@ import java.util.List;
 
 /**
  * a interface which describes a column of a table.
- * */
+ */
 public interface Column<T extends Serializable> extends Serializable, Iterable<T> {
-    Logger logger = LoggerFactory.getLogger(Column.class);
+    Logger logger = LoggerFactory.getLogger( Column.class );
 
     /*
-    * bellow there a couple of methods to transform a column to a specific typed column.
-    * */
+     * bellow there a couple of methods to transform a column to a specific typed column.
+     * */
 
     default StringColumn asStringColumn() {
         return (StringColumn) this;
@@ -25,7 +25,9 @@ public interface Column<T extends Serializable> extends Serializable, Iterable<T
         return (IntegerColumn) this;
     }
 
-    default LongColumn asLongColumn(){ return (LongColumn) this; }
+    default LongColumn asLongColumn() {
+        return (LongColumn) this;
+    }
 
     default FloatColumn asFloatColumn() {
         return (FloatColumn) this;
@@ -42,7 +44,7 @@ public interface Column<T extends Serializable> extends Serializable, Iterable<T
     /**
      * return the data of the column at position.
      */
-    T get(int index);
+    T get( int index );
 
     /**
      * get the name of the column.
@@ -65,64 +67,68 @@ public interface Column<T extends Serializable> extends Serializable, Iterable<T
     List<T> asList();
 
     /*
-    * bellow there a couple of methods to set the values of a column.
-    * in standard way.
-    * */
+     * bellow there a couple of methods to set the values of a column.
+     * in standard way.
+     * */
 
-    default void setString(int rowIndex, String value) {
+    default void setString( int rowIndex, String value ) {
         String message = "setInteger not implemented";
-        logger.error(message);
-        throw new NotImplementedException(message);
+        logger.error( message );
+        throw new NotImplementedException( message );
     }
 
-    default void setInteger(int index, Integer value) {
+    default void setInteger( int index, Integer value ) {
         String message = "setInteger not implemented";
-        logger.error(message);
-        throw new NotImplementedException(message);
+        logger.error( message );
+        throw new NotImplementedException( message );
     }
 
-    default void setLong(int index, Long value){
+    default void setLong( int index, Long value ) {
         String message = "setLong not implemented";
-        logger.error(message);
-        throw new NotImplementedException(message);
+        logger.error( message );
+        throw new NotImplementedException( message );
     }
 
-    default void setFloat(int index, Float value) {
+    default void setFloat( int index, Float value ) {
         String message = "setFloat not implemented";
-        logger.error(message);
-        throw new NotImplementedException(message);
+        logger.error( message );
+        throw new NotImplementedException( message );
     }
 
-    default void setDouble(int index, Double value) {
+    default void setDouble( int index, Double value ) {
         String message = "setDouble not implemented";
-        logger.error(message);
-        throw new NotImplementedException(message);
+        logger.error( message );
+        throw new NotImplementedException( message );
     }
 
-    default void setBoolean(int index, Boolean value) {
+    default void setBoolean( int index, Boolean value ) {
         String message = "setBoolean not implemented";
-        logger.error(message);
-        throw new NotImplementedException(message);
+        logger.error( message );
+        throw new NotImplementedException( message );
     }
 
     /**
      * set a value in a table programmatically (obtaining the type of the data through of an argument).
-     * @param index the index to set the value.
-     * @param value the value to be set.
-     * @param type the {@link DataType type} of the 'value'.
-     * */
-    default void set(int index, Serializable value, DataType type) {
+     *
+     * @param index
+     *         the index to set the value.
+     * @param value
+     *         the value to be set.
+     * @param type
+     *         the {@link DataType type} of the 'value'.
+     */
+    default void set( int index, Serializable value, DataType type ) {
         try {
-            switch (type) {
-                case String -> this.setString(index, (String) value);
-                case Integer -> this.setInteger(index, (Integer) value);
-                case Long -> this.setLong(index, (Long) value);
-                case Float -> this.setFloat(index, (Float) value);
-                case Double -> this.setDouble(index, (Double) value);
-                case Boolean -> this.setBoolean(index, (Boolean) value);
-                default -> throw new RuntimeException("unhandled dataType");
+            switch ( type ) {
+                case String -> this.setString( index, (String) value );
+                case Integer -> this.setInteger( index, (Integer) value );
+                case Long -> this.setLong( index, (Long) value );
+                case Float -> this.setFloat( index, (Float) value );
+                case Double -> this.setDouble( index, (Double) value );
+                case Boolean -> this.setBoolean( index, (Boolean) value );
+                default -> throw new RuntimeException( "unhandled dataType" );
             }
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             String message = String.format(
                     """
                             was not possible to set the '%s' value in the '%s' column at index '%d'
@@ -133,7 +139,7 @@ public interface Column<T extends Serializable> extends Serializable, Iterable<T
                     index,
                     this.getType()
             );
-            logger.error(message);
+            logger.error( message );
             throw e;
         }
     }
@@ -141,16 +147,16 @@ public interface Column<T extends Serializable> extends Serializable, Iterable<T
     /**
      * set the value in the column using a received string. if the string is empty then will
      * set 'null'.
-     * */
-    default void setFromString(int index, String value, DataType dataType) {
-        switch (dataType) {
-            case String -> this.setString(index, value);
-            case Integer -> this.setInteger(index, !value.isEmpty() ? Integer.parseInt(value) : null);
-            case Long -> this.setLong(index, !value.isEmpty() ? Long.parseLong(value) : null);
-            case Float -> this.setFloat(index, !value.isEmpty() ? Float.parseFloat(value) : null);
-            case Double -> this.setDouble(index, !value.isEmpty() ? Double.parseDouble(value) : null);
-            case Boolean -> this.setBoolean(index, !value.isEmpty() ? Boolean.parseBoolean(value) : null);
-            default -> throw new RuntimeException("unhandled datatype");
+     */
+    default void setFromString( int index, String value, DataType dataType ) {
+        switch ( dataType ) {
+            case String -> this.setString( index, value );
+            case Integer -> this.setInteger( index, ! value.isEmpty() ? Integer.parseInt( value ) : null );
+            case Long -> this.setLong( index, ! value.isEmpty() ? Long.parseLong( value ) : null );
+            case Float -> this.setFloat( index, ! value.isEmpty() ? Float.parseFloat( value ) : null );
+            case Double -> this.setDouble( index, ! value.isEmpty() ? Double.parseDouble( value ) : null );
+            case Boolean -> this.setBoolean( index, ! value.isEmpty() ? Boolean.parseBoolean( value ) : null );
+            default -> throw new RuntimeException( "unhandled datatype" );
         }
     }
 }

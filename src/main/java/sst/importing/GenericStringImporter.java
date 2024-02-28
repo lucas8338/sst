@@ -11,7 +11,7 @@ import java.util.Map;
  * but for semi-binary or similar. example: parquet, bison, smalltalk.
  * probably would work with this interface but you would got a completely overhead added because
  * these data formats already have a description of which type their data belongs to.
- * */
+ */
 public interface GenericStringImporter {
     /**
      * a linked map the map need to preserve the insertion order.

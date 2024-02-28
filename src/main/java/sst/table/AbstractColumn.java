@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 /**
  * a abstract class which helps the implementation of a column.
- * */
+ */
 public abstract class AbstractColumn<T extends Serializable> implements Column<T> {
     /**
      * store the name of the column.
@@ -22,15 +22,15 @@ public abstract class AbstractColumn<T extends Serializable> implements Column<T
         return this.name;
     }
 
-    protected void setName(String newName) {
+    protected void setName( String newName ) {
         this.name = newName;
     }
 
-    protected abstract void add(T data);
+    protected abstract void add( T data );
 
-    protected abstract void remove(int index);
+    protected abstract void remove( int index );
 
-    protected abstract void set(int index, T data);
+    protected abstract void set( int index, T data );
 
     public String toString() {
         return this.asList().toString();

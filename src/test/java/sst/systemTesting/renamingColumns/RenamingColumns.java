@@ -13,12 +13,8 @@ import java.util.List;
 
 /**
  * class to test the new method which allow to rename columns of a table.
- * */
+ */
 public class RenamingColumns {
-    protected Table table;
-
-    protected List<String> originalColumnNames;
-
     private final List<DataType> columnTypes = List.of(
             DataType.Integer,
             DataType.String,
@@ -34,10 +30,12 @@ public class RenamingColumns {
             DataType.Integer,
             DataType.Boolean
     );
+    protected Table table;
+    protected List<String> originalColumnNames;
 
-    @Test(groups = {"0"})
+    @Test( groups = {"0"} )
     public void test_loadTable() throws IOException {
-        String loadedString = new String(ClassLoader.getSystemResourceAsStream("pokemonList.csv").readAllBytes());
+        String loadedString = new String( ClassLoader.getSystemResourceAsStream( "pokemonList.csv" ).readAllBytes() );
 
         Table loadedTable = Importing.csv(
                 loadedString,
@@ -49,8 +47,8 @@ public class RenamingColumns {
         this.originalColumnNames = this.table.getColumnNames();
     }
 
-    @Test(groups = {"1"}, dependsOnGroups = {"0"})
-    public void test_rename(){
+    @Test( groups = {"1"}, dependsOnGroups = {"0"} )
+    public void test_rename() {
         IntegerColumn originalFirstColumn = this.table.getColumn( "#" ).asIntegerColumn();
         this.table.renameColumn( "#", "id" );
         Assert.assertEquals(
@@ -71,8 +69,8 @@ public class RenamingColumns {
         );
     }
 
-    @Test(groups = {"2"}, dependsOnGroups = {"1"})
-    public void test_rename2(){
+    @Test( groups = {"2"}, dependsOnGroups = {"1"} )
+    public void test_rename2() {
         IntegerColumn hpColumn = this.table.getColumn( "HP" ).asIntegerColumn();
 
         this.table.renameColumn( "HP", "health points" );
@@ -85,7 +83,7 @@ public class RenamingColumns {
 
         Assert.assertEquals(
                 this.table.getColumnNames(),
-                List.of("id","Name","Type 1","Type 2","Total","health points","Attack","Defense","Sp. Atk","Sp. Def","Speed","Generation","Legendary"),
+                List.of( "id", "Name", "Type 1", "Type 2", "Total", "health points", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed", "Generation", "Legendary" ),
                 "the name of the table and the names which should not be touched do not match " +
                         "so this mean some column name which should not be changed was modified."
         );

@@ -5,7 +5,7 @@
 
 	<groupId>lucas8338.sst</groupId> <!-- recommended to use only lowercase. -->
 	<artifactId>sst</artifactId> <!-- this value must be completly lowercase. -->
-	<version>0.2.0.0</version>
+	<version>0.3.0.0</version>
 	<packaging>jar</packaging>
 
 	<!-- here defines the project information all them are optional -->

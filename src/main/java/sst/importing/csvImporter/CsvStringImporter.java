@@ -23,7 +23,7 @@ public class CsvStringImporter implements GenericStringImporter {
 
     protected List<CSVRecord> csvRecords;
 
-    public CsvStringImporter(String csvString, CSVFormat csvFormat, List<DataType> columnTypes) throws IOException {
+    public CsvStringImporter( String csvString, CSVFormat csvFormat, List<DataType> columnTypes ) throws IOException {
         this.csvString = csvString;
         this.csvFormat = csvFormat;
         this.columnTypes = columnTypes;
@@ -32,8 +32,8 @@ public class CsvStringImporter implements GenericStringImporter {
     }
 
     protected void parseCsv() throws IOException {
-        StringReader reader = new StringReader(this.csvString);
-        CSVParser parser = new CSVParser(reader, this.csvFormat);
+        StringReader reader = new StringReader( this.csvString );
+        CSVParser parser = new CSVParser( reader, this.csvFormat );
         this.csvRecords = parser.getRecords();
     }
 
@@ -42,7 +42,7 @@ public class CsvStringImporter implements GenericStringImporter {
      * the key is the name of the column and their value is a list with the column vales.
      */
     public Map<String, List<String>> getData() {
-        List<String> columnNames = this.csvRecords.get(0).toList();
+        List<String> columnNames = this.csvRecords.get( 0 ).toList();
         int columnNamesSize = columnNames.size();
         List<DataType> columnTypes = this.getTypes();
         Assert.assertEquals(
@@ -52,15 +52,15 @@ public class CsvStringImporter implements GenericStringImporter {
                         "number of columns in the data (" + columnNamesSize + ")."
         );
         final int nRow = this.csvRecords.size();
-        Map<String, List<String>> data = new LinkedHashMap<>(nRow);
-        for (int i = 0; i < columnNamesSize; i++) {
-            String columnName = columnNames.get(i);
-            DataType columnType = this.columnTypes.get(i);
-            data.put(columnName, new ArrayList<String>(nRow));
-            for (int j = 1; j < nRow; j++) {
-                CSVRecord record = this.csvRecords.get(j);
-                String cellString = record.get(i);
-                data.get(columnName).add(cellString);
+        Map<String, List<String>> data = new LinkedHashMap<>( nRow );
+        for ( int i = 0; i < columnNamesSize; i++ ) {
+            String columnName = columnNames.get( i );
+            DataType columnType = this.columnTypes.get( i );
+            data.put( columnName, new ArrayList<String>( nRow ) );
+            for ( int j = 1; j < nRow; j++ ) {
+                CSVRecord record = this.csvRecords.get( j );
+                String cellString = record.get( i );
+                data.get( columnName ).add( cellString );
             }
         }
 
